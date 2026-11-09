@@ -45,3 +45,15 @@ Requires Node.js 24 (already installed). No installation or database needed.
 - Storage checks passed for save/read/clear, damaged data, and unavailable saving using an isolated test. Browser refresh persistence and sound listening still need manual verification.
 - Real OpenAI request returned HTTP 401: the current .env key was rejected. Full AI flow and health refusal remain unverified until a valid key is saved locally. No key was displayed.
 - Current save point captures the implementation with this known authentication blocker.
+
+## Temporary key retest
+- Replaced the local .env key at the user's request; .env remains ignored by Git.
+- A real request to gpt-5.6-luna succeeded and returned a two-sentence reply beginning Okay,. This resolves the earlier HTTP 401 blocker.
+- Revoke this temporary key after testing because it was shared in chat.
+- Browser refresh persistence, health refusal, and device listening checks remain to be completed.
+
+## Sound library preparation
+- Central sound catalog in web/sounds.js generates the sound picker, with stable IDs and categories. The layout wraps and scrolls as the library grows.
+- Saved the supplied YouTube reference and a review checklist in SOUND-RESOURCES.md. The video could not be fetched; its content and reuse permission have not been verified.
+- The current three synthesized sounds remain playable; the reference is not imported audio.
+- Next: collect sound names and original/permitted files, implement recorded playback, then complete listening checks before enabling new recordings.

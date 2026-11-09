@@ -57,3 +57,10 @@ Requires Node.js 24 (already installed). No installation or database needed.
 - Saved the supplied YouTube reference and a review checklist in SOUND-RESOURCES.md. The video could not be fetched; its content and reuse permission have not been verified.
 - The current three synthesized sounds remain playable; the reference is not imported audio.
 - Next: collect sound names and original/permitted files, implement recorded playback, then complete listening checks before enabling new recordings.
+
+## Haircut recording added
+- Corrected the YouTube reference to coconut oil NeeDoh squishy using the user's description.
+- Added the supplied stereo WAV as Haircut, with original creator credit. Tap the pad to play once; repeated touches do not stack recordings. Volume and Stop apply, and leaving the tab stops playback.
+- Original WAV retained. AAC alternative, license verification before publication, and device listening tests remain next steps.
+- Check: select Haircut, tap the pad, adjust volume, Stop, then try Rain to confirm switching stops the recording.
+- Verification: WAV structure is valid stereo 48 kHz, 16-bit PCM; the audio route returned HTTP 200. Listening quality has not yet been verified.

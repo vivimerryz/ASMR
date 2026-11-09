@@ -4,7 +4,7 @@ Add new references here as they arrive. References are ideas to review, not play
 
 | Reference | Sound description | Permission to reuse | Listening checks | Status |
 | --- | --- | --- | --- | --- |
-| https://www.youtube.com/watch?v=XriSXpyjuNI | User example; content could not be fetched, so description is pending | Unknown | Not tested | Reference saved |
+| https://www.youtube.com/watch?v=XriSXpyjuNI | Coconut oil NeeDoh squishy (description supplied by user) | Unknown | Not tested | Reference saved |
 
 ## Adding a playable sound
 
@@ -14,4 +14,11 @@ Add new references here as they arrive. References are ideas to review, not play
 - Listen for corruption, clipping, loud surprises, and glitches on different devices. Record actual results; do not mark untested sounds as tested.
 - Add the approved sound to the catalog in web/sounds.js and connect its playback. The sound picker is generated from this catalog.
 
-The current three sounds are original synthesized effects. The catalog currently supports these effects; recorded-file playback is a next step when audio files are supplied.
+Three original synthesized effects plus the user-supplied Haircut recording are available. Recorded sounds start on a pad tap, play once without stacking, and respect volume and Stop.
+
+## Haircut recording
+- Supplied file: 543479__rossjuterbock__200088_rossjuterbock_scissors-stereo-haircut-asmr.wav
+- Creator indicated by filename: rossjuterbock; exact license not supplied. Keep this local prototype private until reuse terms are confirmed before publication.
+- Local copy: web/audio/haircut.wav. Original WAV preserved without lossy conversion. AAC/M4A alternative remains a follow-up when an encoder is available.
+- Listening checks on different devices remain pending.
+

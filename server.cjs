@@ -4,7 +4,7 @@ const path = require('node:path');
 const askAI = require('./openai-request.cjs');
 const port = 8790;
 let busy = false;
-const files = { '/': ['index.html','text/html'], '/app.js':['app.js','text/javascript'], '/storage.js':['storage.js','text/javascript'], '/sounds.js':['sounds.js','text/javascript'], '/style.css':['style.css','text/css'] };
+const files = { '/audio/haircut.wav':['audio/haircut.wav','audio/wav'], '/': ['index.html','text/html'], '/app.js':['app.js','text/javascript'], '/storage.js':['storage.js','text/javascript'], '/sounds.js':['sounds.js','text/javascript'], '/style.css':['style.css','text/css'] };
 http.createServer(async (req,res) => {
   res.setHeader('X-Content-Type-Options','nosniff');
   res.setHeader('Cache-Control','no-store');
@@ -25,4 +25,5 @@ http.createServer(async (req,res) => {
     try {json(200,{reply:await askAI(message.trim())});} finally {busy=false;}
   } catch {json(502,{error:'The AI could not answer just now. Please check the key in .env and your internet connection, then try Next again.'});}
 }).listen(port,'127.0.0.1',()=>console.log(`ASMR Stress Reliever: http://localhost:${port}`));
+
 

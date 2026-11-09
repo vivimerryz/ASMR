@@ -9,7 +9,7 @@ if(typeof state.message==='string'&&typeof state.reply==='string')show();
 for(const text of samples){const b=document.createElement('button');b.type='button';b.textContent=text;b.onclick=()=>{$('feeling').value=text;};$('samples').append(b);}
 $('form').onsubmit=async e=>{e.preventDefault();const message=$('feeling').value.trim();if(!message)return;$('next').disabled=true;$('next').textContent='Thinking…';$('error').textContent='';try{const r=await fetch('/api/calm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message})});const data=await r.json();if(!r.ok)throw Error(data.error);state={message,reply:data.reply,sound};saved();show();}catch(e){$('error').textContent=e.message.includes('fetch')?'The AI could not answer. Please check the key in .env and your internet connection.':e.message;}finally{$('next').disabled=false;$('next').textContent='Next →';}};
 for(const item of sounds){const b=document.createElement('button');b.type='button';b.dataset.sound=item.id;b.textContent=item.icon+' '+item.name;b.title=item.category;document.querySelector('.sounds').append(b);}
-function select(){document.querySelectorAll('[data-sound]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sound===sound)));}
+function select(){$('peel-game').hidden=sound!=='peel';$('pad').hidden=sound==='peel';document.querySelectorAll('[data-sound]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sound===sound)));}
 select();document.querySelectorAll('[data-sound]').forEach(b=>b.onclick=()=>{stop();sound=b.dataset.sound;state.sound=sound;if(state.reply)saved();select();});
 async function play(){try{const chosen=sounds.find(item=>item.id===sound);if(chosen.src){if(recording)return;const audio=new Audio(chosen.src);recording=audio;audio.volume=Number($('volume').value)/100;audio.onended=()=>{if(recording===audio){recording=null;$('sound-status').textContent='Recording finished. Tap to play again.';}};audio.onerror=()=>{if(recording===audio){recording=null;$('sound-status').textContent='This recording could not play. Please try another sound.';}};$('sound-status').textContent='Loading Haircut…';await audio.play();if(recording===audio)$('sound-status').textContent='Playing Haircut • '+chosen.credit;return;}ctx ||= new AudioContext();await ctx.resume();if(!master){master=ctx.createGain();master.gain.value=Number($('volume').value)/100;master.connect(ctx.destination);}const now=ctx.currentTime;if(now-last<.10)return;last=now;const item=sounds.find(item=>item.id===sound);const duration=item.duration;const buffer=ctx.createBuffer(1,Math.ceil(ctx.sampleRate*duration),ctx.sampleRate);const arr=buffer.getChannelData(0);let smooth=0;for(let i=0;i<arr.length;i++){const noise=Math.random()*2-1;smooth=.96*smooth+.04*noise;arr[i]=item.texture==='tap'?smooth*3:item.texture==='noise'?noise*.18:smooth*2;}const src=ctx.createBufferSource();src.buffer=buffer;const gain=ctx.createGain();gain.gain.setValueAtTime(0,now);gain.gain.linearRampToValueAtTime(.7,now+.025);gain.gain.exponentialRampToValueAtTime(.001,now+duration);src.connect(gain).connect(master);src.start();voices.push(src);src.onended=()=>{voices=voices.filter(v=>v!==src);src.disconnect();gain.disconnect();};$('sound-status').textContent='Making '+sound+' • tap again or move across the pad.';}catch{$('sound-status').textContent='Sound could not start. Try another browser or check your device sound.';}}
 function stop(){if(recording){recording.pause();recording.currentTime=0;recording=null;}voices.forEach(v=>{try{v.stop();}catch{}});voices=[];$('sound-status').textContent='Sound stopped. Start again whenever you like.';}
@@ -20,3 +20,21 @@ $('forget').onclick=()=>{if(clear()){state={};stop();$('studio').hidden=true;$('
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
 
 
+
+// One small peel activity: movement reveals the surface and makes a short sound.
+let peeled=0, peelDrag=null, peelStopped=false;
+const film=$('peel-film'), surface=$('peel-surface');
+function renderPeel(){
+  film.style.clipPath=`polygon(${peeled}% 0,100% 0,100% 100%,${peeled}% 100%)`;
+  $('peel-status').textContent=peeled>=100?'All peeled! Start again whenever you like.':`${Math.round(peeled)}% peeled • move slowly and enjoy the sound.`;
+  $('peel-step').disabled=peeled>=100;
+}
+function advancePeel(value){if(peeled>=100)return;const next=Math.min(100,Math.max(peeled,value));if(next>peeled){peeled=next;renderPeel();play();}}
+surface.onpointerdown=e=>{if(sound!=='peel'||peeled>=100)return;peelStopped=false;peelDrag={id:e.pointerId,x:e.clientX,start:peeled};surface.setPointerCapture(e.pointerId);};
+surface.onpointermove=e=>{if(!peelDrag||e.pointerId!==peelDrag.id||peelStopped)return;advancePeel(peelDrag.start+Math.max(0,e.clientX-peelDrag.x)/surface.getBoundingClientRect().width*100);};
+surface.onpointerup=surface.onpointercancel=()=>{peelDrag=null;};
+$('peel-step').onclick=()=>{peelStopped=false;advancePeel(peeled+10);};
+$('peel-reset').onclick=()=>{stop();peeled=0;renderPeel();};
+const previousStop=$('stop').onclick;
+$('stop').onclick=()=>{peelDrag=null;peelStopped=true;previousStop();};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)peelDrag=null;});

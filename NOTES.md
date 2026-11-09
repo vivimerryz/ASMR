@@ -64,3 +64,10 @@ Requires Node.js 24 (already installed). No installation or database needed.
 - Original WAV retained. AAC alternative, license verification before publication, and device listening tests remain next steps.
 - Check: select Haircut, tap the pad, adjust volume, Stop, then try Rain to confirm switching stops the recording.
 - Verification: WAV structure is valid stereo 48 kHz, 16-bit PCM; the audio route returned HTTP 200. Listening quality has not yet been verified.
+
+## One game added: Fresh peel
+- Read BRIEF.md first. Added one original, simplified peel activity inspired by the supplied Bored.com Fresh Peel link; its external game code and assets were not copied or embedded.
+- Choose Fresh peel after the AI check-in. Drag right across the film to reveal the surface and generate quiet short sounds, or use Peel a little with keyboard/touch. Start again resets it.
+- No scores, levels, accounts, extra AI calls, or new saved data. Existing volume and Stop apply; leaving the tab cancels dragging and stops sound.
+- Check: peel by dragging, finish using Peel a little, reset, turn volume down, and press Stop while dragging. Device listening tests remain pending.
+- Verification: syntax checks passed; isolated interaction checks passed for dragging, sound triggers, completion, reset, and Stop cancellation; running app served the activity. Visual browser and device listening checks remain pending.

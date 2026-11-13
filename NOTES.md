@@ -71,3 +71,8 @@ Requires Node.js 24 (already installed). No installation or database needed.
 - No scores, levels, accounts, extra AI calls, or new saved data. Existing volume and Stop apply; leaving the tab cancels dragging and stops sound.
 - Check: peel by dragging, finish using Peel a little, reset, turn volume down, and press Stop while dragging. Device listening tests remain pending.
 - Verification: syntax checks passed; isolated interaction checks passed for dragging, sound triggers, completion, reset, and Stop cancellation; running app served the activity. Visual browser and device listening checks remain pending.
+
+## Original Fresh Peel link
+- Added a prominent Play the original Fresh Peel link inside the Fresh peel choice. Opens https://www.bored.com/arcade/fresh-peel/ in a new tab.
+- Clearly labeled the local version as our simple peel activity.
+- Check: refresh the app, choose Fresh peel, and click Play the original Fresh Peel.

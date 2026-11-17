@@ -4,7 +4,7 @@ const path = require('node:path');
 const askAI = require('./openai-request.cjs');
 const port = 8790;
 let busy = false;
-const files = { '/audio/haircut.wav':['audio/haircut.wav','audio/wav'], '/': ['index.html','text/html'], '/app.js':['app.js','text/javascript'], '/storage.js':['storage.js','text/javascript'], '/sounds.js':['sounds.js','text/javascript'], '/style.css':['style.css','text/css'] };
+const files = { '/audio/haircut.wav':['audio/haircut.wav','audio/wav'], '/audio/light-brushing.ogg':['audio/light-brushing.ogg','audio/ogg'], '/audio/keyboard-scratching.wav':['audio/keyboard-scratching.wav','audio/wav'], '/audio/squishy-fruit.wav':['audio/squishy-fruit.wav','audio/wav'], '/audio/cracker-chewing.wav':['audio/cracker-chewing.wav','audio/wav'], '/audio/crunchy-eating.wav':['audio/crunchy-eating.wav','audio/wav'], '/': ['index.html','text/html'], '/app.js':['app.js','text/javascript'], '/storage.js':['storage.js','text/javascript'], '/sounds.js':['sounds.js','text/javascript'], '/style.css':['style.css','text/css'] };
 http.createServer(async (req,res) => {
   res.setHeader('X-Content-Type-Options','nosniff');
   res.setHeader('Cache-Control','no-store');
@@ -19,11 +19,13 @@ http.createServer(async (req,res) => {
   if (busy) return json(429,{error:'Please wait for the current reply.'});
   try {
     let body = ''; for await (const chunk of req) {body += chunk; if (body.length > 8000) return json(413,{error:'Please write a shorter message.'});}
-    const {message} = JSON.parse(body);
+    const {message, choices} = JSON.parse(body);
     if (typeof message !== 'string' || !message.trim() || message.length > 500) return json(400,{error:'Please type a feeling, up to 500 characters.'});
     busy = true;
-    try {json(200,{reply:await askAI(message.trim())});} finally {busy=false;}
+    if (!Array.isArray(choices) || choices.length > 30 || choices.some(c => !c || typeof c.id !== 'string' || typeof c.name !== 'string' || typeof c.type !== 'string')) return json(400,{error:'Please refresh and try again.'});
+    try {json(200,await askAI(message.trim(),choices));} finally {busy=false;}
   } catch {json(502,{error:'The AI could not answer just now. Please check the key in .env and your internet connection, then try Next again.'});}
 }).listen(port,'127.0.0.1',()=>console.log(`ASMR Stress Reliever: http://localhost:${port}`));
+
 
 

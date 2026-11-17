@@ -76,3 +76,23 @@ Requires Node.js 24 (already installed). No installation or database needed.
 - Added a prominent Play the original Fresh Peel link inside the Fresh peel choice. Opens https://www.bored.com/arcade/fresh-peel/ in a new tab.
 - Clearly labeled the local version as our simple peel activity.
 - Check: refresh the app, choose Fresh peel, and click Play the original Fresh Peel.
+
+## Five sounds added
+- Added light brushing, keyboard scratching, squishy fruit sounds, chewing a cracker, and crunchy eating to the sound picker using the provided files.
+- Sound playback uses the existing audio player, volume, and Stop controls.
+- Audio files are locally stored in web/audio; exact reuse terms and multi-device listening checks still need confirmation.
+
+
+## Color palette
+- Applied the requested lavender, pink, and blue palette throughout the interface.
+
+## YouTube ASMR links
+- Added five user-provided YouTube links to the studio under More ASMR videos. Each opens in a new tab; link labels are generic because video descriptions weren't provided.
+
+- Added the sixth user-provided YouTube link to More ASMR videos. It opens in a new tab.
+
+
+## Mood based recommendations
+- Next now sends mood plus available sound/video IDs and names to the AI. The AI returns one validated recommendation ID; the app selects it and displays the matching video link or sound.
+- Other video links are inside a closed menu. AI is instructed to avoid eating sounds for frightening or unrelated moods.
+

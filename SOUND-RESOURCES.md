@@ -22,3 +22,12 @@ Three original synthesized effects plus the user-supplied Haircut recording are 
 - Local copy: web/audio/haircut.wav. Original WAV preserved without lossy conversion. AAC/M4A alternative remains a follow-up when an encoder is available.
 - Listening checks on different devices remain pending.
 
+
+## New user-supplied recordings
+- Light brushing — rattel7 — local OGG: web/audio/light-brushing.ogg
+- Keyboard scratching — honeybunny — local WAV: web/audio/keyboard-scratching.wav
+- Squishy fruit chewing — valerie-vivegnis — local WAV: web/audio/squishy-fruit.wav
+- Chewing a cracker — viertelnachvier — local WAV: web/audio/cracker-chewing.wav
+- Crunchy eating — rudmer_rotteveel — local WAV: web/audio/crunchy-eating.wav
+- Files were provided by the project owner. Verify licenses and listen on more than one device before public release; these checks are not yet complete.
+

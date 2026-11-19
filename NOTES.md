@@ -91,6 +91,13 @@ Requires Node.js 24 (already installed). No installation or database needed.
 
 - Added the sixth user-provided YouTube link to More ASMR videos. It opens in a new tab.
 
+## Expandable video and game lists
+- Moved the six existing video links into web/resources.js and added a separate game link list there, beginning with the existing Fresh Peel link.
+- Added a collapsed “See ASMR games” menu alongside videos; future links can be added to these two lists. Existing AI picks, sounds, and Fresh Peel activity remain connected.
+- Added six more YouTube links (ASMR videos 7–12) and the Playgama ASMR games page to the matching lists in web/resources.js.
+- Check: run npm start, complete a check-in, open each menu and click its links, then try the AI-picked sound/game and the Fresh Peel activity.
+- Verification: JavaScript syntax and catalog checks passed for 12 videos and 2 game links. The server now serves web/resources.js so the browser can load the expanded lists. Localhost/browser clicks still need to be confirmed.
+
 
 ## Mood based recommendations
 - Next now sends mood plus available sound/video IDs and names to the AI. The AI returns one validated recommendation ID; the app selects it and displays the matching video link or sound.

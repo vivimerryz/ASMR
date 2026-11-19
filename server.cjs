@@ -4,7 +4,7 @@ const path = require('node:path');
 const askAI = require('./openai-request.cjs');
 const port = 8790;
 let busy = false;
-const files = { '/audio/haircut.wav':['audio/haircut.wav','audio/wav'], '/audio/light-brushing.ogg':['audio/light-brushing.ogg','audio/ogg'], '/audio/keyboard-scratching.wav':['audio/keyboard-scratching.wav','audio/wav'], '/audio/squishy-fruit.wav':['audio/squishy-fruit.wav','audio/wav'], '/audio/cracker-chewing.wav':['audio/cracker-chewing.wav','audio/wav'], '/audio/crunchy-eating.wav':['audio/crunchy-eating.wav','audio/wav'], '/': ['index.html','text/html'], '/app.js':['app.js','text/javascript'], '/storage.js':['storage.js','text/javascript'], '/sounds.js':['sounds.js','text/javascript'], '/style.css':['style.css','text/css'] };
+const files = { '/audio/haircut.wav':['audio/haircut.wav','audio/wav'], '/audio/light-brushing.ogg':['audio/light-brushing.ogg','audio/ogg'], '/audio/keyboard-scratching.wav':['audio/keyboard-scratching.wav','audio/wav'], '/audio/squishy-fruit.wav':['audio/squishy-fruit.wav','audio/wav'], '/audio/cracker-chewing.wav':['audio/cracker-chewing.wav','audio/wav'], '/audio/crunchy-eating.wav':['audio/crunchy-eating.wav','audio/wav'], '/': ['index.html','text/html'], '/app.js':['app.js','text/javascript'], '/storage.js':['storage.js','text/javascript'], '/sounds.js':['sounds.js','text/javascript'], '/resources.js':['resources.js','text/javascript'], '/style.css':['style.css','text/css'] };
 http.createServer(async (req,res) => {
   res.setHeader('X-Content-Type-Options','nosniff');
   res.setHeader('Cache-Control','no-store');

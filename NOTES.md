@@ -19,6 +19,7 @@ Requires Node.js 24 (already installed). No installation or database needed.
 - In Vercel Project Settings → Environment Variables, add `KEYGEN_URL` and `KEYGEN_TOKEN` for each environment you plan to use (Production and Preview, for example). Online, getKey() reads only those process environment variables and does not read `.env`.
 - Keep the project Root Directory at the repository root so Vercel finds vercel.json and api/calm.js. No separate build command or other environment variables are needed.
 - Local use still starts with `npm start`; getKey() reads the ignored `.env` file on your computer.
+- The local server still allows requests from localhost only. If invoked in a Vercel runtime, it now allows only HTTPS requests from that same hosted domain, so the old “Please open the app on this computer” rejection is removed for same-site online use.
 - Check: a real local server request returned an AI reply and a valid sound pick; a mocked Vercel-function check confirmed it uses process.env without reading `.env`; syntax, JSON config, and `.env` ignore checks passed.
 
 ## Done

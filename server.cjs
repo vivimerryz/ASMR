@@ -4,6 +4,18 @@ const path = require('node:path');
 const askAI = require('./openai-request.cjs');
 const port = 8790;
 let busy = false;
+function allowedOrigin(req) {
+  const origin = req.headers.origin;
+  if (origin === `http://localhost:${port}` || origin === `http://127.0.0.1:${port}`) return true;
+  if (!process.env.VERCEL || !origin) return false;
+  try {
+    const parsed = new URL(origin);
+    const host = req.headers['x-forwarded-host'] || req.headers.host;
+    return parsed.protocol === 'https:' && parsed.host === host;
+  } catch {
+    return false;
+  }
+}
 const files = { '/audio/haircut.wav':['audio/haircut.wav','audio/wav'], '/audio/light-brushing.ogg':['audio/light-brushing.ogg','audio/ogg'], '/audio/keyboard-scratching.wav':['audio/keyboard-scratching.wav','audio/wav'], '/audio/squishy-fruit.wav':['audio/squishy-fruit.wav','audio/wav'], '/audio/cracker-chewing.wav':['audio/cracker-chewing.wav','audio/wav'], '/audio/crunchy-eating.wav':['audio/crunchy-eating.wav','audio/wav'], '/': ['index.html','text/html'], '/app.js':['app.js','text/javascript'], '/storage.js':['storage.js','text/javascript'], '/sounds.js':['sounds.js','text/javascript'], '/resources.js':['resources.js','text/javascript'], '/style.css':['style.css','text/css'] };
 http.createServer(async (req,res) => {
   res.setHeader('X-Content-Type-Options','nosniff');
@@ -16,7 +28,7 @@ http.createServer(async (req,res) => {
   if (req.method !== 'POST' || req.url !== '/api/calm') { res.writeHead(404); return res.end('Not found'); }
   const json = (status,data) => {res.writeHead(status,{'Content-Type':'application/json'});res.end(JSON.stringify(data));};
   const fail = (status,message,fix) => { console.error(fix); json(status,{error:{message,fix}}); };
-  if (req.headers.origin !== `http://localhost:${port}` && req.headers.origin !== `http://127.0.0.1:${port}`) return fail(403,'Please open the app on this computer.','Open the app from this computer using its local address.');
+  if (!allowedOrigin(req)) return fail(403,'This request could not be checked.','Open the app from its own website, then try again.');
   if (busy) return fail(429,'Please wait for the current reply.','Wait for the current AI reply to finish.');
   try {
     let body = ''; for await (const chunk of req) {body += chunk; if (body.length > 8000) return fail(413,'Please write a shorter message.','Write a shorter check-in and try again.');}

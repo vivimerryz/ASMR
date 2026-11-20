@@ -6,13 +6,28 @@ OpenAI model: `gpt-5.6-luna`
 From this project folder, run `npm start`, then open http://localhost:8790.
 Requires Node.js 24 (already installed). No installation or database needed.
 
+## MindDo AI key setup
+- The AI key comes from `getKey()` in keygen.cjs. Only server code calls it; the browser never receives the MindDo token or OpenAI key.
+- For local use, put your MindDo service address and token in `.env`. That file is ignored by Git.
+- `getKey()` calls `KEYGEN_URL/api/lookup-key`, caches the returned key until `expiresAt`, and refreshes once if OpenAI rejects the key. It does not retry in a loop.
+- When a request fails, the server returns `error.message` and `error.fix`; the page shows the message and the server logs the fix hint without printing credentials.
+- The MindDo key helper was verified against the live model-list request on 2026-11-20. Available models: `gpt-4o`, `gpt-4o-2024-08-06`, `gpt-4o-2024-11-20`, `gpt-4o-mini`, `gpt-4o-mini-2024-07-18`, and `gpt-5.6-luna`.
+
+## Vercel setup
+- Vercel serves the static page from `web/` using `outputDirectory` in vercel.json and runs `/api/calm` as the Node.js function in `api/calm.js`.
+- The function bundles BRIEF.md and NOTES.md for the AI instructions and model name. The 60-second function limit is configured in vercel.json for the AI request.
+- In Vercel Project Settings → Environment Variables, add `KEYGEN_URL` and `KEYGEN_TOKEN` for each environment you plan to use (Production and Preview, for example). Online, getKey() reads only those process environment variables and does not read `.env`.
+- Keep the project Root Directory at the repository root so Vercel finds vercel.json and api/calm.js. No separate build command or other environment variables are needed.
+- Local use still starts with `npm start`; getKey() reads the ignored `.env` file on your computer.
+- Check: a real local server request returned an AI reply and a valid sound pick; a mocked Vercel-function check confirmed it uses process.env without reading `.env`; syntax, JSON config, and `.env` ignore checks passed.
+
 ## Done
 - Preserved the exact project brief in BRIEF.md and the earlier mobile app.
 - Built the web Version 1: type a feeling, press Next once, see your words and a real AI reply, choose Rain, Soft taps, or Brush, and make sounds with a sound pad.
 - No login or videos. Three made-up example check-ins, with no real people.
 - All browser saving is in web/storage.js. Saves on this computer only for now.
 - Only Next asks AI. Thinking… disables the button. Failed requests explain how to check the key and connection.
-- Server-only key read from .env; .env is ignored by Git and never served. openai-request.cjs contains the AI call and reads the AI instructions from BRIEF.md on every call.
+- Server-only AI key comes from `getKey()` in keygen.cjs; it requests and caches a MindDo key until it expires. `.env` is ignored by Git and never served. openai-request.cjs contains the AI call and reads the AI instructions from BRIEF.md on every call.
 - Quiet adjustable volume, Stop, short sounds with smooth fades, and stop when leaving the tab.
 - Sounds are synthesized locally, avoiding corrupted audio files. No AAC files are needed for this version. Device listening tests are still required; format alone cannot guarantee good sound.
 - Your typed check-in and reply are saved locally. Your words are sent to OpenAI on Next; API response storage is disabled.

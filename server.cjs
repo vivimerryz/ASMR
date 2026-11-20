@@ -15,16 +15,19 @@ http.createServer(async (req,res) => {
   }
   if (req.method !== 'POST' || req.url !== '/api/calm') { res.writeHead(404); return res.end('Not found'); }
   const json = (status,data) => {res.writeHead(status,{'Content-Type':'application/json'});res.end(JSON.stringify(data));};
-  if (req.headers.origin !== `http://localhost:${port}` && req.headers.origin !== `http://127.0.0.1:${port}`) return json(403,{error:'Please open the app on this computer.'});
-  if (busy) return json(429,{error:'Please wait for the current reply.'});
+  const fail = (status,message,fix) => { console.error(fix); json(status,{error:{message,fix}}); };
+  if (req.headers.origin !== `http://localhost:${port}` && req.headers.origin !== `http://127.0.0.1:${port}`) return fail(403,'Please open the app on this computer.','Open the app from this computer using its local address.');
+  if (busy) return fail(429,'Please wait for the current reply.','Wait for the current AI reply to finish.');
   try {
-    let body = ''; for await (const chunk of req) {body += chunk; if (body.length > 8000) return json(413,{error:'Please write a shorter message.'});}
+    let body = ''; for await (const chunk of req) {body += chunk; if (body.length > 8000) return fail(413,'Please write a shorter message.','Write a shorter check-in and try again.');}
     const {message, choices} = JSON.parse(body);
-    if (typeof message !== 'string' || !message.trim() || message.length > 500) return json(400,{error:'Please type a feeling, up to 500 characters.'});
+    if (typeof message !== 'string' || !message.trim() || message.length > 500) return fail(400,'Please type a feeling, up to 500 characters.','Type a short check-in and try again.');
+    if (!Array.isArray(choices) || choices.length > 30 || choices.some(c => !c || typeof c.id !== 'string' || typeof c.name !== 'string' || typeof c.type !== 'string')) return fail(400,'Please refresh and try again.','Refresh the app and try again.');
     busy = true;
-    if (!Array.isArray(choices) || choices.length > 30 || choices.some(c => !c || typeof c.id !== 'string' || typeof c.name !== 'string' || typeof c.type !== 'string')) return json(400,{error:'Please refresh and try again.'});
     try {json(200,await askAI(message.trim(),choices));} finally {busy=false;}
-  } catch {json(502,{error:'The AI could not answer just now. Please check the key in .env and your internet connection, then try Next again.'});}
+  } catch (error) {
+    fail(502,error?.message || 'The AI could not answer just now.',error?.fix || 'Check the MindDo settings in .env and your internet connection, then try again.');
+  }
 }).listen(port,'127.0.0.1',()=>console.log(`ASMR Stress Reliever: http://localhost:${port}`));
 
 

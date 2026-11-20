@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "outputDirectory": "web",
+  "functions": {
+    "api/calm.js": {
+      "includeFiles": "{BRIEF.md,NOTES.md}",
+      "maxDuration": 60
+    }
+  }
+}
